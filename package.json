@@ -7,6 +7,17 @@
     "type": "git",
     "url": "https://github.com/synapsestudios/react-native-zendesk-support"
   },
+  "nativePackage": true,
+  "peerDependencies": {
+    "react": "^16.11.0",
+    "react-native": "0.60.x | 0.61.x | 0.62.x | 0.63.x"
+  },
+  "devDependencies": {
+    "prettier": "2.0.x",
+    "eslint": "7.3.x",
+    "react": "^16.11.0",
+    "react-native": "0.63.x"
+  },
   "keywords": [
     "zendesk",
     "support",

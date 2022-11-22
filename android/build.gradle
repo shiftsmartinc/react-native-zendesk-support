@@ -1,30 +1,108 @@
+// apply plugin: 'com.android.library'
+
+// def safeExtGet(prop, fallback) {
+//     rootProject.ext.has(prop) ? rootProject.ext.get(prop) : fallback
+// }
+
+// buildscript {
+//   repositories {
+//     mavenCentral()
+//     google()
+//   }
+
+//   dependencies {
+//     // classpath 'com.android.tools.build:gradle:3.3.1'
+//     // classpath("com.google.gms:google-services:4.3.5")
+//   }
+// }
+
+// android {
+//     compileSdkVersion safeExtGet('compileSdkVersion', 28)
+//     //  buildToolsVersion safeExtGet('buildToolsVersion', "28.0.3")
+    
+
+//     defaultConfig {
+//       minSdkVersion safeExtGet('minSdkVersion', 16)
+//       targetSdkVersion safeExtGet('targetSdkVersion', 28)
+//       versionCode 1
+//       versionName "1.0"
+//         ndk {
+//             abiFilters "armeabi-v7a", "x86"
+//         }
+//     }
+// }
+
+// repositories {
+//   mavenCentral()
+//   jcenter()
+//   google()
+//   maven { url 'https://zendesk.jfrog.io/zendesk/repo' }
+// }
+
+// dependencies {
+//     implementation 'com.facebook.react:react-native:+'
+//     implementation group: 'com.zendesk', name: 'sdk', version: '1.11.0.1'
+//     implementation group: 'com.zendesk', name: 'sdk-providers', version: '1.11.0.1'
+
+// }
+
 apply plugin: 'com.android.library'
 
 def safeExtGet(prop, fallback) {
-    rootProject.ext.has(prop) ? rootProject.ext.get(prop) : fallback
+  rootProject.ext.has(prop) ? rootProject.ext.get(prop) : fallback
+}
+
+buildscript {
+  repositories {
+    jcenter()
+    google()
+  }
+
+  dependencies {
+    classpath 'com.android.tools.build:gradle:3.2.1'
+  }
 }
 
 android {
-    compileSdkVersion safeExtGet('compileSdkVersion', 25)
+    compileSdkVersion safeExtGet('compileSdkVersion', 28)
+    buildToolsVersion safeExtGet('buildToolsVersion', "28.0.3")
+    lintOptions {
+       abortOnError false
+    }
 
     defaultConfig {
-        minSdkVersion 16
-        targetSdkVersion 22
-        versionCode 2
-        versionName "1.1"
-        ndk {
-            abiFilters "armeabi-v7a", "x86"
-        }
+      minSdkVersion safeExtGet('minSdkVersion', 16)
+      targetSdkVersion safeExtGet('targetSdkVersion', 28)
+      versionCode 1
+      versionName "1.0"
     }
 }
 
 repositories {
-    maven { url 'https://zendesk.jfrog.io/zendesk/repo' }
+  mavenCentral {
+    content {
+      excludeGroup("com.facebook.react")
+    }
+  }
+  mavenCentral()
+  mavenLocal()
+  jcenter()
+  google()
+  maven { url 'https://zendesk.jfrog.io/zendesk/repo' }
+  maven {
+    // All of React Native (JS, Obj-C sources, Android binaries) is installed from npm
+    url "$rootDir/../node_modules/react-native/android"
+  }
 }
 
 dependencies {
-    implementation 'com.facebook.react:react-native:+'
-    implementation group: 'com.zendesk', name: 'sdk', version: '1.11.0.1'
-    implementation group: 'com.zendesk', name: 'sdk-providers', version: '1.11.0.1'
+  implementation "com.facebook.react:react-native:0.63.5"
 
+      // implementation group: 'com.zendesk', name: 'sdk', version: '1.11.0.1'
+    // implementation group: 'com.zendesk', name: 'sdk-providers', version: '1.11.0.1'
+  implementation group: 'com.zendesk', name: 'support-providers', version: '2.1.1'
+  implementation group: 'com.zendesk', name: 'support', version: '2.1.1'
+//  implementation group: 'com.zendesk', name: 'core', version: '2.1.1'
+  // implementation group: 'com.zendesk', name: 'feedback', version: '2.0.0'
+  // api group: 'com.zendesk', name: 'messaging', version: safeExtGet('zendeskMessagingVersion', '5.1.0')
 }
