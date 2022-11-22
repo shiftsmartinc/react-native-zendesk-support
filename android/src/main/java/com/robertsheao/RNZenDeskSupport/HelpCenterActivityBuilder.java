@@ -40,20 +40,9 @@ class HelpCenterActivityBuilder extends HelpCenterUiConfig.Builder {
 
   public HelpCenterActivityBuilder() {
     super();
-//    this..withShowConversationsMenuButton(true);
     this.withShowConversationsMenuButton(true);
     this.withContactUsButtonVisible(true);
   }
-
-//  static HelpCenterActivityBuilder create() {
-////    super()
-////    super.withShowConversationsMenuButton(true)
-//    HelpCenterUiConfig.Builder builder = (HelpCenterUiConfig.Builder) new HelpCenterActivity().builder();
-//    builder.withShowConversationsMenuButton(true);
-////    builder.withArticleVoting(true);
-//    builder.withContactUsButtonVisible(true);
-////    return builder;
-////  }
 
   HelpCenterActivityBuilder withOptions(ReadableMap options) {
     if (!(options == null || options.toHashMap().isEmpty())) {
@@ -107,12 +96,6 @@ class HelpCenterActivityBuilder extends HelpCenterUiConfig.Builder {
     this.args.putLongArray("extra_section_ids", sectionIds);
     return this;
   }
-
-//  /** @deprecated */
-//  SupportActivityBuilder showContactUsButton(boolean showContactUsButton) {
-//    this.args.putSerializable("extra_contact_us_button_visibility", showContactUsButton? ContactUsButtonVisibility.ARTICLE_LIST_ONLY:ContactUsButtonVisibility.OFF);
-//    return this;
-//  }
 
   private HelpCenterActivityBuilder  withContactUsButtonVisibility(boolean contactUsButtonVisibility) {
     this.args.putSerializable("extra_contact_us_button_visibility", contactUsButtonVisibility);
