@@ -1,35 +1,21 @@
 package com.robertsheao.RNZenDeskSupport;
 
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
-// import com.zendesk.logger.Logger;
-// import com.zendesk.sdk.feedback.WrappedZendeskFeedbackConfiguration;
-// import com.zendesk.sdk.feedback.ZendeskFeedbackConfiguration;
-// import com.zendesk.sdk.support.ContactUsButtonVisibility;
-// import com.zendesk.sdk.support.SupportActivity;
-// import com.zendesk.util.CollectionUtils;
-import zendesk.support.UiConfig;
-import com.zendesk.*;
+import zendesk.commonui.UiConfig;
 import zendesk.core.*;
 import com.zendesk.util.*;
 import com.zendesk.logger.*;
-import zendesk.support.Support;
-import zendesk.support.guide.HelpCenterUiConfig.Builder;
+
 import zendesk.support.RequestProvider;
 import zendesk.support.Support;
 import zendesk.support.request.RequestActivity;
-//import zendesk.support.guide.HelpCenterActivity;
 import zendesk.support.guide.HelpCenterActivity;
 import zendesk.support.guide.*;
 import zendesk.support.guide.HelpCenterUiConfig;
 import zendesk.support.guide.HelpCenterUiConfig.Builder;
-import zendesk.*;
-import com.zendesk.service.*;
-import com.zendesk.service.*;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -170,16 +156,4 @@ class HelpCenterActivityBuilder extends HelpCenterUiConfig.Builder {
     return this;
   }
 
-  void show(Context context) {
-    Logger.d("SupportActivity", "show: showing SupportActivity", new Object[0]);
-    context.startActivity(this.intent(context));
-  }
-
-  private Intent intent(Context context) {
-    Logger.d("SupportActivity", "intent: creating Intent", new Object[0]);
-    Intent intent = new Intent(context, HelpCenterUiConfig.Builder.class);
-    intent.putExtras(this.args);
-    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-    return intent;
-  }
 }

@@ -1,51 +1,3 @@
-// apply plugin: 'com.android.library'
-
-// def safeExtGet(prop, fallback) {
-//     rootProject.ext.has(prop) ? rootProject.ext.get(prop) : fallback
-// }
-
-// buildscript {
-//   repositories {
-//     mavenCentral()
-//     google()
-//   }
-
-//   dependencies {
-//     // classpath 'com.android.tools.build:gradle:3.3.1'
-//     // classpath("com.google.gms:google-services:4.3.5")
-//   }
-// }
-
-// android {
-//     compileSdkVersion safeExtGet('compileSdkVersion', 28)
-//     //  buildToolsVersion safeExtGet('buildToolsVersion', "28.0.3")
-    
-
-//     defaultConfig {
-//       minSdkVersion safeExtGet('minSdkVersion', 16)
-//       targetSdkVersion safeExtGet('targetSdkVersion', 28)
-//       versionCode 1
-//       versionName "1.0"
-//         ndk {
-//             abiFilters "armeabi-v7a", "x86"
-//         }
-//     }
-// }
-
-// repositories {
-//   mavenCentral()
-//   jcenter()
-//   google()
-//   maven { url 'https://zendesk.jfrog.io/zendesk/repo' }
-// }
-
-// dependencies {
-//     implementation 'com.facebook.react:react-native:+'
-//     implementation group: 'com.zendesk', name: 'sdk', version: '1.11.0.1'
-//     implementation group: 'com.zendesk', name: 'sdk-providers', version: '1.11.0.1'
-
-// }
-
 apply plugin: 'com.android.library'
 
 def safeExtGet(prop, fallback) {
@@ -53,14 +5,19 @@ def safeExtGet(prop, fallback) {
 }
 
 buildscript {
-  repositories {
-    jcenter()
-    google()
-  }
+    // The Android Gradle plugin is only required when opening the android folder stand-alone.
+    // This avoids unnecessary downloads and potential conflicts when the library is included as a
+    // module dependency in an application project.
+    if (project == rootProject) {
+        repositories {
+            mavenCentral()
+            google()
+        }
+        dependencies {
+            classpath 'com.android.tools.build:gradle:3.2.1'
+        }
+    }
 
-  dependencies {
-    classpath 'com.android.tools.build:gradle:3.2.1'
-  }
 }
 
 android {
@@ -68,6 +25,14 @@ android {
     buildToolsVersion safeExtGet('buildToolsVersion', "28.0.3")
     lintOptions {
        abortOnError false
+    }
+    // Used to override the NDK path/version on internal CI or by allowing
+    // users to customize the NDK path/version from their root project (e.g. for M1 support)
+    if (rootProject.hasProperty("ndkPath")) {
+        ndkPath rootProject.ext.ndkPath
+    }
+    if (rootProject.hasProperty("ndkVersion")) {
+        ndkVersion rootProject.ext.ndkVersion
     }
 
     defaultConfig {
@@ -79,14 +44,23 @@ android {
 }
 
 repositories {
-  mavenCentral {
-    content {
-      excludeGroup("com.facebook.react")
+    mavenLocal()
+    exclusiveContent {
+        filter {
+            includeGroup "com.facebook.react"
+        }
+        forRepository {
+            maven {
+                url "$rootDir/../node_modules/react-native/android"
+            }
+        }
     }
-  }
-  mavenCentral()
-  mavenLocal()
-  jcenter()
+    maven {
+        // Android JSC is installed from npm
+        url "$rootDir/../node_modules/jsc-android/dist"
+    }
+    google()
+    mavenCentral()
   google()
   maven { url 'https://zendesk.jfrog.io/zendesk/repo' }
   maven {
@@ -96,13 +70,8 @@ repositories {
 }
 
 dependencies {
-  implementation "com.facebook.react:react-native:0.63.5"
+  implementation "com.facebook.react:react-native:+"
 
-      // implementation group: 'com.zendesk', name: 'sdk', version: '1.11.0.1'
-    // implementation group: 'com.zendesk', name: 'sdk-providers', version: '1.11.0.1'
-  implementation group: 'com.zendesk', name: 'support-providers', version: '2.1.1'
-  implementation group: 'com.zendesk', name: 'support', version: '2.1.1'
-//  implementation group: 'com.zendesk', name: 'core', version: '2.1.1'
-  // implementation group: 'com.zendesk', name: 'feedback', version: '2.0.0'
-  // api group: 'com.zendesk', name: 'messaging', version: safeExtGet('zendeskMessagingVersion', '5.1.0')
+  implementation group: 'com.zendesk', name: 'support-providers', version: '3.0.3'
+  implementation group: 'com.zendesk', name: 'support', version: '3.0.3'
 }
