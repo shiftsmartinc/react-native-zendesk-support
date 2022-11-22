@@ -1,5 +1,5 @@
 {
-  "name": "@synapsestudios/react-native-zendesk-support",
+  "name": "@shiftsmart/react-native-zendesk-support",
   "version": "1.1.0",
   "description": "React Native Wrapper around Zendesk Support",
   "main": "index.js",
@@ -27,6 +27,6 @@
     "android",
     "react-component"
   ],
-  "author": "Synapse Studios, LLC (http://synapsestudios.com)",
+  "author": "Shiftsmart Inc",
   "license": "MIT"
 }

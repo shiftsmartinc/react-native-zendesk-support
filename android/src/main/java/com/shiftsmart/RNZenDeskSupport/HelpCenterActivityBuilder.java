@@ -1,4 +1,4 @@
-package com.robertsheao.RNZenDeskSupport;
+package com.shiftsmart.RNZenDeskSupport;
 
 import android.os.Bundle;
 

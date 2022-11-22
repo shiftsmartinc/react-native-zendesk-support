@@ -3,7 +3,7 @@
  * https://github.com/RobertSheaO/react-native-zendesk-support
  */
 
-package com.robertsheao.RNZenDeskSupport;
+package com.shiftsmart.RNZenDeskSupport;
 
 import android.content.Intent;
 import android.app.Activity;
