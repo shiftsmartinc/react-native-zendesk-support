@@ -198,7 +198,7 @@ public class RNZenDeskSupportModule extends ReactContextBaseJavaModule {
           map.putString("description", createRequest.getDescription());
           map.putString("id", createRequest.getId());
           // https://zendesk.github.io/mobile_sdk_javadocs/supportv2/v211/zendesk/support/CreateRequest.html
-//          map.putString("email", createRequest.getEmail());
+          // map.putString("email", createRequest.getEmail());
           map.putString("subject", createRequest.getSubject());
 
           request.putMap("request", map);
