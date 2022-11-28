@@ -23,17 +23,17 @@ import com.facebook.react.bridge.WritableMap;
 import zendesk.support.request.RequestActivity;
 import zendesk.support.requestlist.RequestListActivity;
 import zendesk.support.CustomField;
-import com.zendesk.*;
-import zendesk.core.*;
-import com.zendesk.util.*;
-import com.zendesk.service.*;
+import zendesk.core.AnonymousIdentity;
+import zendesk.core.AnonymousIdentity.Builder;
+import com.zendesk.service.ZendeskCallback;
+import com.zendesk.service.ErrorResponse;
+
 import zendesk.core.Zendesk;
 import zendesk.support.RequestProvider;
 import zendesk.support.Support;
 import zendesk.support.CreateRequest;
 import zendesk.support.Request;
 
-import com.zendesk.collection.*;
 
 import java.util.ArrayList;
 import java.util.List;
