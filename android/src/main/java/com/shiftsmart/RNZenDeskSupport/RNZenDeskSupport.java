@@ -3,7 +3,7 @@
  * https://github.com/RobertSheaO/react-native-zendesk-support
  */
 
-package com.robertsheao.RNZenDeskSupport;
+package com.shiftsmart.RNZenDeskSupport;
 
 import com.facebook.react.ReactPackage;
 import com.facebook.react.bridge.JavaScriptModule;
