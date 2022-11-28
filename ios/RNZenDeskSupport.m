@@ -3,7 +3,7 @@
 //
 //  Created by Patrick O'Connor on 8/30/17.
 //
-
+#import <React/RCTUtils.h>
 // RN < 0.40 suppoert
 #if __has_include(<React/RCTBridge.h>)
 #import <React/RCTConvert.h>
@@ -14,6 +14,8 @@
 #import "RNZenDeskSupport.h"
 #import <ZendeskSDK/ZendeskSDK.h>
 #import <ZendeskProviderSDK/ZendeskProviderSDK.h>
+#import <ZendeskCoreSDK/ZendeskCoreSDK.h>
+
 
 @implementation RNZenDeskSupport
 
@@ -24,86 +26,91 @@ RCT_EXPORT_METHOD(initialize:(NSDictionary *)config){
     NSString *zendeskUrl = [RCTConvert NSString:config[@"zendeskUrl"]];
     NSString *clientId = [RCTConvert NSString:config[@"clientId"]];
     
-    [[ZDKConfig instance]
-     initializeWithAppId:appId
-     zendeskUrl:zendeskUrl
-     clientId:clientId];
+    [ZDKZendesk initializeWithAppId:appId clientId:clientId zendeskUrl:zendeskUrl];
+    [ZDKSupport initializeWithZendesk:[ZDKZendesk instance]];
 }
 
 RCT_EXPORT_METHOD(setupIdentity:(NSDictionary *)identity){
     dispatch_async(dispatch_get_main_queue(), ^{
-        ZDKAnonymousIdentity *zdIdentity = [ZDKAnonymousIdentity new];
         NSString *email = [RCTConvert NSString:identity[@"customerEmail"]];
         NSString *name = [RCTConvert NSString:identity[@"customerName"]];
-        if (email != nil) {
-            zdIdentity.email = email;
-        }
-        if (name != nil) {
-            zdIdentity.name = name;
-        }
-        [ZDKConfig instance].userIdentity = zdIdentity;
+        id<ZDKObjCIdentity> userIdentity = [[ZDKObjCAnonymous alloc] initWithName:name email:email];
+        [[ZDKZendesk instance] setIdentity:userIdentity];
         
     });
 }
 
 RCT_EXPORT_METHOD(showHelpCenterWithOptions:(NSDictionary *)options) {
     dispatch_async(dispatch_get_main_queue(), ^{
-        UIWindow *window=[UIApplication sharedApplication].keyWindow;
-        UIViewController *vc = [window rootViewController];
-        ZDKHelpCenterOverviewContentModel *helpCenterContentModel = [ZDKHelpCenterOverviewContentModel defaultContent];
-        helpCenterContentModel.hideContactSupport = [RCTConvert BOOL:options[@"hideContactSupport"]];
-        if (helpCenterContentModel.hideContactSupport) {
-            [ZDKHelpCenter setNavBarConversationsUIType:ZDKNavBarConversationsUITypeNone];
-        }
-        vc.modalPresentationStyle = UIModalPresentationFormSheet;
-        [ZDKHelpCenter presentHelpCenterOverview:vc withContentModel:helpCenterContentModel];
+        ZDKHelpCenterUiConfiguration * hcConfig = [ZDKHelpCenterUiConfiguration new];
+        hcConfig.showContactOptionsOnEmptySearch = [RCTConvert BOOL:options[@"hideContactSupport"]];
+        UIViewController *helpCenter = [ZDKHelpCenterUi buildHelpCenterOverviewUiWithConfigs:@[hcConfig]];
+        helpCenter.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle: options[@"localizedDismissButtonTitle"] ?: @"Close"
+                                                                                           style: UIBarButtonItemStylePlain
+                                                                                          target: self
+                                                                                          action: @selector(dismissZendeskUI)];
+        UINavigationController *helpCenterNav = [[UINavigationController alloc] initWithRootViewController: helpCenter];
+
+        [RCTPresentedViewController() presentViewController:helpCenterNav animated:YES completion:nil];
     });
 }
 
+- (void) doNothing {
+    
+}
+
+- (void) dismissZendeskUI {
+    [RCTPresentedViewController() dismissViewControllerAnimated:YES completion:^{}];
+}
+
+
+
 RCT_EXPORT_METHOD(showCategoriesWithOptions:(NSArray *)categories options:(NSDictionary *)options) {
     dispatch_async(dispatch_get_main_queue(), ^{
-        UIWindow *window=[UIApplication sharedApplication].keyWindow;
-        UIViewController *vc = [window rootViewController];
-        ZDKHelpCenterOverviewContentModel *helpCenterContentModel = [ZDKHelpCenterOverviewContentModel defaultContent];
-        helpCenterContentModel.groupType = ZDKHelpCenterOverviewGroupTypeCategory;
-        helpCenterContentModel.groupIds = categories;
-        helpCenterContentModel.hideContactSupport = [RCTConvert BOOL:options[@"hideContactSupport"]];
-        if (helpCenterContentModel.hideContactSupport) {
-            [ZDKHelpCenter setNavBarConversationsUIType:ZDKNavBarConversationsUITypeNone];
-        }
-        vc.modalPresentationStyle = UIModalPresentationFormSheet;
-        [ZDKHelpCenter presentHelpCenterOverview:vc withContentModel:helpCenterContentModel];
+        ZDKHelpCenterUiConfiguration * hcConfig = [ZDKHelpCenterUiConfiguration new];
+        hcConfig.showContactOptionsOnEmptySearch = [RCTConvert BOOL:options[@"hideContactSupport"]];
+        hcConfig.groupType = ZDKHelpCenterOverviewGroupTypeCategory;
+        hcConfig.groupIds =categories;
+        UIViewController *helpCenter = [ZDKHelpCenterUi buildHelpCenterOverviewUiWithConfigs:@[hcConfig]];
+        helpCenter.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle: options[@"localizedDismissButtonTitle"] ?: @"Close"
+                                                                                           style: UIBarButtonItemStylePlain
+                                                                                          target: self
+                                                                                          action: @selector(dismissZendeskUI)];
+        UINavigationController *helpCenterNav = [[UINavigationController alloc] initWithRootViewController: helpCenter];
+        [RCTPresentedViewController() presentViewController:helpCenterNav animated:YES completion:nil];
+       
     });
 }
 
 RCT_EXPORT_METHOD(showSectionsWithOptions:(NSArray *)sections options:(NSDictionary *)options) {
     dispatch_async(dispatch_get_main_queue(), ^{
-        UIWindow *window=[UIApplication sharedApplication].keyWindow;
-        UIViewController *vc = [window rootViewController];
-        ZDKHelpCenterOverviewContentModel *helpCenterContentModel = [ZDKHelpCenterOverviewContentModel defaultContent];
-        helpCenterContentModel.groupType = ZDKHelpCenterOverviewGroupTypeSection;
-        helpCenterContentModel.groupIds = sections;
-        helpCenterContentModel.hideContactSupport = [RCTConvert BOOL:options[@"hideContactSupport"]];
-        if (helpCenterContentModel.hideContactSupport) {
-            [ZDKHelpCenter setNavBarConversationsUIType:ZDKNavBarConversationsUITypeNone];
-        }
-        vc.modalPresentationStyle = UIModalPresentationFormSheet;
-        [ZDKHelpCenter presentHelpCenterOverview:vc withContentModel:helpCenterContentModel];
+        ZDKHelpCenterUiConfiguration * hcConfig = [ZDKHelpCenterUiConfiguration new];
+        hcConfig.showContactOptionsOnEmptySearch = [RCTConvert BOOL:options[@"hideContactSupport"]];
+        hcConfig.groupType = ZDKHelpCenterOverviewGroupTypeSection;
+        hcConfig.groupIds = sections;
+        UIViewController *helpCenter = [ZDKHelpCenterUi buildHelpCenterOverviewUiWithConfigs:@[hcConfig]];
+        helpCenter.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle: options[@"localizedDismissButtonTitle"] ?: @"Close"
+                                                                                           style: UIBarButtonItemStylePlain
+                                                                                          target: self
+                                                                                          action: @selector(dismissZendeskUI)];
+        UINavigationController *helpCenterNav = [[UINavigationController alloc] initWithRootViewController: helpCenter];
+        [RCTPresentedViewController() presentViewController:helpCenterNav animated:YES completion:nil];
     });
 }
 
 RCT_EXPORT_METHOD(showLabelsWithOptions:(NSArray *)labels options:(NSDictionary *)options) {
     dispatch_async(dispatch_get_main_queue(), ^{
-        UIWindow *window=[UIApplication sharedApplication].keyWindow;
-        UIViewController *vc = [window rootViewController];
-        ZDKHelpCenterOverviewContentModel *helpCenterContentModel = [ZDKHelpCenterOverviewContentModel defaultContent];
-        helpCenterContentModel.labels = labels;
-        helpCenterContentModel.hideContactSupport = [RCTConvert BOOL:options[@"hideContactSupport"]];
-        if (helpCenterContentModel.hideContactSupport) {
-            [ZDKHelpCenter setNavBarConversationsUIType:ZDKNavBarConversationsUITypeNone];
-        }
-        vc.modalPresentationStyle = UIModalPresentationFormSheet;
-        [ZDKHelpCenter presentHelpCenterOverview:vc withContentModel:helpCenterContentModel];
+        ZDKHelpCenterUiConfiguration * hcConfig = [ZDKHelpCenterUiConfiguration new];
+        hcConfig.showContactOptionsOnEmptySearch = [RCTConvert BOOL:options[@"hideContactSupport"]];
+        hcConfig.labels = labels;
+        UIViewController *helpCenter = [ZDKHelpCenterUi buildHelpCenterOverviewUiWithConfigs:@[hcConfig]];
+        helpCenter.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle: options[@"localizedDismissButtonTitle"] ?: @"Close"
+                                                                                           style: UIBarButtonItemStylePlain
+                                                                                          target: self
+                                                                                          action: @selector(dismissZendeskUI)];
+        UINavigationController *helpCenterNav = [[UINavigationController alloc] initWithRootViewController: helpCenter];
+        [RCTPresentedViewController() presentViewController:helpCenterNav animated:YES completion:nil];
+       
     });
 }
 
@@ -125,23 +132,29 @@ RCT_EXPORT_METHOD(showLabels:(NSArray *)labels) {
 
 RCT_EXPORT_METHOD(callSupport:(NSDictionary *)customFields) {
     dispatch_async(dispatch_get_main_queue(), ^{
-        UIWindow *window=[UIApplication sharedApplication].keyWindow;
-        UIViewController *vc = [window rootViewController];
         NSMutableArray *fields = [[NSMutableArray alloc] init];
         for (NSString* key in customFields) {
             id value = [customFields objectForKey:key];
             [fields addObject: [[ZDKCustomField alloc] initWithFieldId:@(key.integerValue) andValue:value]];
         }
-        [ZDKConfig instance].customTicketFields = fields;
-        [ZDKRequests presentRequestCreationWithViewController:vc];
+        ZDKRequestUiConfiguration * config = [[ZDKRequestUiConfiguration alloc] init];
+        config.fields = fields;
+        UIViewController *requestScreen = [ZDKRequestUi buildRequestUiWith:@[config]];
+
+        UINavigationController *requestScreenNav = [[UINavigationController alloc] initWithRootViewController: requestScreen];
+        [RCTPresentedViewController() presentViewController:requestScreenNav animated:YES completion:nil];
     });
 }
 
 RCT_EXPORT_METHOD(supportHistory){
     dispatch_async(dispatch_get_main_queue(), ^{
-        UIWindow *window=[UIApplication sharedApplication].keyWindow;
-        UIViewController *vc = [window rootViewController];
-        [ZDKRequests presentRequestListWithViewController:vc];
+        UIViewController *requestListController = [ZDKRequestUi buildRequestList];
+        requestListController.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle: @"Back"
+                                                                                                                                                                                style: UIBarButtonItemStylePlain
+                                                                                                                                                                               target: self
+                                                                                                                                                                               action: @selector(dismissZendeskUI)];
+UINavigationController *requestListControllerNav = [[UINavigationController alloc] initWithRootViewController: requestListController];
+[RCTPresentedViewController() presentViewController:requestListControllerNav animated:YES completion:nil];
     });
 }
 
@@ -169,7 +182,7 @@ RCT_EXPORT_METHOD(createRequest:(NSDictionary *)request
             // Handle the error
             reject(@"No Ticket", @"Failed to create ticket", error);
             // Log the error
-            [ZDKLogger e:error.description];
+//            [ZDKLogger e:error.description];
             
         } else {
             // Handle the success

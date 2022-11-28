@@ -12,16 +12,36 @@ Pod::Spec.new do |s|
   s.source = { :git => 'https://github.com/shiftsmartinc/react-native-zendesk-support.git',  :tag => 'v'+s.version.to_s }
   s.homepage = 'https://github.com/shiftsmartinc/react-native-zendesk-support'
   s.source_files   = 'ios/RNZenDeskSupport.{h,m}'
+  s.static_framework = true
 
-  s.platform = :ios, "8.0"
+  s.platform = :ios, "10"
 
-  s.dependency 'ZendeskSDK','~> 1.11.2.1'
-  s.dependency 'React'
-  s.ios.xcconfig = {
-    'FRAMEWORK_SEARCH_PATHS' => '"${PODS_ROOT}/ZendeskSDK"',
-    'OTHER_LDFLAGS' => '-framework ZendeskSDK'
-  }
-  s.user_target_xcconfig = { 'CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES' => 'YES' }
+  s.framework    = 'Foundation'
+  s.framework    = 'UIKit'
+
+  # Deprecated and renamed after 4 to ZendeskSupportSDK and SupportProviderSDK
+  s.dependency 'ZendeskSDK', '~> 3.0.3'
+  s.dependency "React-Core"
+
+  if ENV['RCT_NEW_ARCH_ENABLED'] == '1' then
+    s.compiler_flags = folly_compiler_flags + " -DRCT_NEW_ARCH_ENABLED=1"
+    s.pod_target_xcconfig    = {
+        "HEADER_SEARCH_PATHS" => "\"$(PODS_ROOT)/boost\"",
+        "OTHER_CPLUSPLUSFLAGS" => "-DFOLLY_NO_CONFIG -DFOLLY_MOBILE=1 -DFOLLY_USE_LIBCPP=1",
+        "CLANG_CXX_LANGUAGE_STANDARD" => "c++17"
+    }
+    s.dependency "React-RCTFabric"
+    s.dependency "React-Codegen"
+    s.dependency "RCT-Folly"
+    s.dependency "RCTRequired"
+    s.dependency "RCTTypeSafety"
+    s.dependency "ReactCommon/turbomodule/core"
+  end
+  # s.ios.xcconfig = {
+  #   'FRAMEWORK_SEARCH_PATHS' => '"${PODS_ROOT}/ZendeskSDK"',
+  #   'OTHER_LDFLAGS' => '-framework ZendeskSDK'
+  # }
+  # s.user_target_xcconfig = { 'CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES' => 'YES' }
 
 
 end
