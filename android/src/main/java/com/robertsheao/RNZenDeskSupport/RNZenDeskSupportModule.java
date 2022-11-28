@@ -20,18 +20,20 @@ import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.Promise;
 
 import com.facebook.react.bridge.WritableMap;
-import com.zendesk.sdk.feedback.ui.ContactZendeskActivity;
-import com.zendesk.sdk.requests.RequestActivity;
-import com.zendesk.sdk.support.SupportActivity;
-import com.zendesk.sdk.support.ContactUsButtonVisibility;
-import com.zendesk.sdk.model.access.AnonymousIdentity;
-import com.zendesk.sdk.model.access.Identity;
-import com.zendesk.sdk.model.request.CustomField;
-import com.zendesk.sdk.model.request.CreateRequest;
-import com.zendesk.sdk.network.impl.ZendeskConfig;
-import com.zendesk.sdk.network.RequestProvider;
-import com.zendesk.service.ErrorResponse;
+import zendesk.support.request.RequestActivity;
+import zendesk.support.requestlist.RequestListActivity;
+import zendesk.support.CustomField;
+import zendesk.core.AnonymousIdentity;
+import zendesk.core.AnonymousIdentity.Builder;
 import com.zendesk.service.ZendeskCallback;
+import com.zendesk.service.ErrorResponse;
+
+import zendesk.core.Zendesk;
+import zendesk.support.RequestProvider;
+import zendesk.support.Support;
+import zendesk.support.CreateRequest;
+import zendesk.support.Request;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,7 +63,8 @@ public class RNZenDeskSupportModule extends ReactContextBaseJavaModule {
     String appId = config.getString("appId");
     String zendeskUrl = config.getString("zendeskUrl");
     String clientId = config.getString("clientId");
-    ZendeskConfig.INSTANCE.init(getReactApplicationContext(), zendeskUrl, appId, clientId);
+    Zendesk.INSTANCE.init(getReactApplicationContext(), zendeskUrl, appId, clientId);
+    Support.INSTANCE.init(Zendesk.INSTANCE);
   }
 
   @ReactMethod
@@ -76,38 +79,42 @@ public class RNZenDeskSupportModule extends ReactContextBaseJavaModule {
       builder.withNameIdentifier(identity.getString("customerName"));
     }
 
-    ZendeskConfig.INSTANCE.setIdentity(builder.build());
+    Zendesk.INSTANCE.setIdentity(builder.build());
   }
 
   @ReactMethod
   public void showHelpCenterWithOptions(ReadableMap options) {
-    SupportActivityBuilder.create()
+    Activity activity = getCurrentActivity();
+    new HelpCenterActivityBuilder()
             .withOptions(options)
-            .show(getReactApplicationContext());
+            .show(activity);
   }
 
   @ReactMethod
   public void showCategoriesWithOptions(ReadableArray categoryIds, ReadableMap options) {
-    SupportActivityBuilder.create()
+    Activity activity = getCurrentActivity();
+    new HelpCenterActivityBuilder()
             .withOptions(options)
             .withArticlesForCategoryIds(categoryIds)
-            .show(getReactApplicationContext());
+            .show(activity);
   }
 
   @ReactMethod
   public void showSectionsWithOptions(ReadableArray sectionIds, ReadableMap options) {
-    SupportActivityBuilder.create()
+    Activity activity = getCurrentActivity();
+    new HelpCenterActivityBuilder()
             .withOptions(options)
             .withArticlesForSectionIds(sectionIds)
-            .show(getReactApplicationContext());
+            .show(activity);
   }
 
   @ReactMethod
   public void showLabelsWithOptions(ReadableArray labels, ReadableMap options) {
-    SupportActivityBuilder.create()
+    Activity activity = getCurrentActivity();
+    new HelpCenterActivityBuilder()
             .withOptions(options)
             .withLabelNames(labels)
-            .show(getReactApplicationContext());
+            .show(activity);
   }
 
   @ReactMethod
@@ -138,14 +145,14 @@ public class RNZenDeskSupportModule extends ReactContextBaseJavaModule {
     for (Map.Entry<String, Object> next : customFields.toHashMap().entrySet())
       fields.add(new CustomField(Long.parseLong(next.getKey()), (String) next.getValue()));
 
-    ZendeskConfig.INSTANCE.setCustomFields(fields);
+
 
     Activity activity = getCurrentActivity();
 
     if(activity != null){
-      Intent callSupportIntent = new Intent(getReactApplicationContext(), ContactZendeskActivity.class);
-      callSupportIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-      getReactApplicationContext().startActivity(callSupportIntent);
+      RequestActivity.builder()
+      .withCustomFields(fields)
+      .show(activity);
     }
   }
 
@@ -153,12 +160,7 @@ public class RNZenDeskSupportModule extends ReactContextBaseJavaModule {
   public void supportHistory() {
 
     Activity activity = getCurrentActivity();
-
-    if(activity != null){
-      Intent supportHistoryIntent = new Intent(getReactApplicationContext(), RequestActivity.class);
-      supportHistoryIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-      getReactApplicationContext().startActivity(supportHistoryIntent);
-    }
+    RequestListActivity.builder().show(activity);
   }
 
   @ReactMethod
@@ -166,8 +168,8 @@ public class RNZenDeskSupportModule extends ReactContextBaseJavaModule {
           ReadableMap request,
           Promise promise) {
     try {
-      // Get an instance of the RequestProvider from the ZendeskConfig
-      RequestProvider provider = ZendeskConfig.INSTANCE.provider().requestProvider();
+      // Get an instance of the RequestProvider from the Zendesk
+      RequestProvider provider = Support.INSTANCE.provider().requestProvider();
 
       // Build the request object from the javascript arguments
       CreateRequest zdRequest = new CreateRequest();
@@ -184,10 +186,10 @@ public class RNZenDeskSupportModule extends ReactContextBaseJavaModule {
       zdRequest.setTags(tagsList);
 
       innerPromise = promise;
-      // Create thew ZendeskCallback.
-      ZendeskCallback<CreateRequest> callback = new ZendeskCallback<CreateRequest>() {
+      // Create the ZendeskCallback.
+      ZendeskCallback<Request> callback = new ZendeskCallback<Request>() {
         @Override
-        public void onSuccess(CreateRequest createRequest) {
+        public void onSuccess(Request createRequest) {
           Log.d(TAG, "onSuccess: Ticket created!");
 
           WritableMap map = Arguments.createMap();
@@ -195,7 +197,8 @@ public class RNZenDeskSupportModule extends ReactContextBaseJavaModule {
 
           map.putString("description", createRequest.getDescription());
           map.putString("id", createRequest.getId());
-          map.putString("email", createRequest.getEmail());
+          // https://zendesk.github.io/mobile_sdk_javadocs/supportv2/v211/zendesk/support/CreateRequest.html
+          // map.putString("email", createRequest.getEmail());
           map.putString("subject", createRequest.getSubject());
 
           request.putMap("request", map);
