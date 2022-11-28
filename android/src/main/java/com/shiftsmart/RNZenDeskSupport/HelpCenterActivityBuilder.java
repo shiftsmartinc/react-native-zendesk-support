@@ -5,15 +5,13 @@ import android.os.Bundle;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import zendesk.commonui.UiConfig;
-import zendesk.core.*;
-import com.zendesk.util.*;
-import com.zendesk.logger.*;
+import com.zendesk.util.CollectionUtils;
+import com.zendesk.logger.Logger;
 
 import zendesk.support.RequestProvider;
 import zendesk.support.Support;
 import zendesk.support.request.RequestActivity;
 import zendesk.support.guide.HelpCenterActivity;
-import zendesk.support.guide.*;
 import zendesk.support.guide.HelpCenterUiConfig;
 import zendesk.support.guide.HelpCenterUiConfig.Builder;
 
