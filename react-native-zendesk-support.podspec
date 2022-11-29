@@ -37,11 +37,4 @@ Pod::Spec.new do |s|
     s.dependency "RCTTypeSafety"
     s.dependency "ReactCommon/turbomodule/core"
   end
-  # s.ios.xcconfig = {
-  #   'FRAMEWORK_SEARCH_PATHS' => '"${PODS_ROOT}/ZendeskSDK"',
-  #   'OTHER_LDFLAGS' => '-framework ZendeskSDK'
-  # }
-  # s.user_target_xcconfig = { 'CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES' => 'YES' }
-
-
 end
