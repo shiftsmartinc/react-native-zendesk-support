@@ -142,8 +142,11 @@ public class RNZenDeskSupportModule extends ReactContextBaseJavaModule {
 
     List<CustomField> fields = new ArrayList<>();
 
-    for (Map.Entry<String, Object> next : customFields.toHashMap().entrySet())
-      fields.add(new CustomField(Long.parseLong(next.getKey()), (String) next.getValue()));
+    for (Map.Entry<String, Object> next : customFields.toHashMap().entrySet()) {
+      if (next.getKey() != undefined) {
+        fields.add(new CustomField(Long.parseLong(next.getKey()), (String) next.getValue()));
+      }
+    }
 
 
 
