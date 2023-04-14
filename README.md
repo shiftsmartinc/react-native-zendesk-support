@@ -38,7 +38,7 @@ end
 
 If using `react-native link` doesn't work, you can try manually linking. Sometimes apps created with `create-react-native-app` that haven't been ejected can have problems linking properly.
 
-1. Open your project in XCode, right click on `Libraries` and click `Add Files to "Your Project Name"`. Look under node_modules/react-native-zendesk-support`and add`RNZenDeskSupport.xcodeproj`
+1. Open your project in XCode, right click on `Libraries` and click `Add Files to "Your Project Name"`. Look under node_modules/react-native-zendesk-support and add `RNZenDeskSupport.xcodeproj`
 2. Add `libRNZenDeskSupport.a` from `Libraries/RNZenDeskSupport.xcodeproj/Products` to `Build Phases -> Link Binary With Libraries`
 3. Verify `$(SRCROOT)/../../react-native/React` is included in `Header Search Paths` under `Build Settings` for the `Libraries/RNZenDeskSupport.xcodeproj` library you just added. Mark it as `recursive`
 
