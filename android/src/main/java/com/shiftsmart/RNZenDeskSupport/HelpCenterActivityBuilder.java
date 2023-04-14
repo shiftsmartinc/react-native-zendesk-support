@@ -4,7 +4,6 @@ import android.os.Bundle;
 
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
-import zendesk.commonui.UiConfig;
 import com.zendesk.util.CollectionUtils;
 import com.zendesk.logger.Logger;
 
@@ -12,8 +11,8 @@ import zendesk.support.RequestProvider;
 import zendesk.support.Support;
 import zendesk.support.request.RequestActivity;
 import zendesk.support.guide.HelpCenterActivity;
-import zendesk.support.guide.HelpCenterUiConfig;
-import zendesk.support.guide.HelpCenterUiConfig.Builder;
+import zendesk.configurations.Configuration;
+import zendesk.support.guide.HelpCenterConfiguration;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -25,7 +24,7 @@ import java.util.ArrayList;
  * https://github.com/RobertSheaO/react-native-zendesk-support
  */
 
-class HelpCenterActivityBuilder extends HelpCenterUiConfig.Builder {
+class HelpCenterActivityBuilder extends HelpCenterConfiguration.Builder {
   private final Bundle args = new Bundle();
 
 
@@ -100,9 +99,9 @@ class HelpCenterActivityBuilder extends HelpCenterUiConfig.Builder {
     return this;
   }
 
-  private HelpCenterActivityBuilder withContactConfiguration(UiConfig  configuration) {
+  private HelpCenterActivityBuilder withContactConfiguration(Configuration  configuration) {
     if(configuration != null) {
-      configuration = (UiConfig)configuration;
+      configuration = (Configuration)configuration;
     }
 
     this.args.putSerializable("extra_contact_configuration", (Serializable)configuration);
