@@ -22,4 +22,6 @@ Pod::Spec.new do |s|
   # Deprecated and renamed after 4 to ZendeskSupportSDK and SupportProviderSDK
   s.dependency 'ZendeskSDK', '~> 3.0.3'
   s.dependency "React-Core"
+  s.pod_target_xcconfig = { 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64' }
+  s.user_target_xcconfig = { 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64' }
 end
