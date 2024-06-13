@@ -45,16 +45,7 @@ android {
 
 repositories {
     mavenLocal()
-    exclusiveContent {
-        filter {
-            includeGroup "com.facebook.react"
-        }
-        forRepository {
-            maven {
-                url "$rootDir/../node_modules/react-native/android"
-            }
-        }
-    }
+
     maven {
         // Android JSC is installed from npm
         url "$rootDir/../node_modules/jsc-android/dist"
@@ -70,8 +61,8 @@ repositories {
 }
 
 dependencies {
-  implementation "com.facebook.react:react-native:+"
+   implementation "com.facebook.react:react-android:+"
 
-  implementation group: 'com.zendesk', name: 'support-providers', version: '5.1.0'
-  implementation group: 'com.zendesk', name: 'support', version: '5.1.0'
+  implementation group: 'com.zendesk', name: 'support-providers', version: '5.1.1'
+  implementation group: 'com.zendesk', name: 'support', version: '5.1.1'
 }

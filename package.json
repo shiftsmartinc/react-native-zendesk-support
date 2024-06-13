@@ -9,13 +9,13 @@
   },
   "nativePackage": true,
   "peerDependencies": {
-    "react": "^16.11.0",
+    "react": "^18.2.0",
     "react-native": "^0.60.0"
   },
   "devDependencies": {
-    "prettier": "2.0.x",
-    "eslint": "7.3.x",
-    "react": "^16.11.0",
+    "prettier": "^2.8.8",
+    "eslint": "^8.57.0",
+    "react": "^18.2.0",
     "react-native": "0.74.1"
   },
   "keywords": [
@@ -27,6 +27,7 @@
     "android",
     "react-component"
   ],
+  "packageManager": "yarn@1.22.22",
   "author": "Shiftsmart Inc",
   "license": "MIT"
 }
