@@ -162,41 +162,47 @@ RCT_EXPORT_METHOD(createRequest:(NSDictionary *)request
                   createRequestWithResolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject) {
     
-    ZDKCreateRequest *zdRequest = [ZDKCreateRequest new];
-    NSString *subject = [RCTConvert NSString:request[@"subject"]];
-    if (subject != nil) {
-        zdRequest.subject = subject;
-    }
-    NSString *requestDescription = [RCTConvert NSString:request[@"requestDescription"]];
-    if (requestDescription != nil) {
-        zdRequest.requestDescription = requestDescription;
-    }
-    NSArray *tags = [RCTConvert NSArray:request[@"tags"]];
-    if (tags != nil) {
-        zdRequest.tags = tags;
-    }
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Sorry this feature doesn't exist"
+                                                    message:@""
+                                                   delegate:self
+                                          cancelButtonTitle:@"Cancel";
+    [alert show];
     
-    ZDKRequestProvider *provider = [[ZDKRequestProvider alloc] init];
-    [provider createRequest:zdRequest withCallback:^(id result, NSError *error) {
-        if (error) {
-            // Handle the error
-            reject(@"No Ticket", @"Failed to create ticket", error);
-            // Log the error
-//            [ZDKLogger e:error.description];
-            
-        } else {
-            // Handle the success
-            ZDKDispatcherResponse * payload = result;
-            NSString *data = [[NSString alloc] initWithData:payload.data encoding:NSUTF8StringEncoding];
-            
-            // Deserialize the data JSON string to an NSDictionary
-            NSError *jsonError;
-            NSData *objectData = [data dataUsingEncoding:NSUTF8StringEncoding];
-            NSDictionary *json = [NSJSONSerialization JSONObjectWithData:objectData
-                                                                 options:NSJSONReadingMutableContainers
-                                                                   error:&jsonError];
-            resolve(json);
-        }
-    }];
+//    ZDKCreateRequest *zdRequest = [ZDKCreateRequest new];
+//    NSString *subject = [RCTConvert NSString:request[@"subject"]];
+//    if (subject != nil) {
+//        zdRequest.subject = subject;
+//    }
+//    NSString *requestDescription = [RCTConvert NSString:request[@"requestDescription"]];
+//    if (requestDescription != nil) {
+//        zdRequest.requestDescription = requestDescription;
+//    }
+//    NSArray *tags = [RCTConvert NSArray:request[@"tags"]];
+//    if (tags != nil) {
+//        zdRequest.tags = tags;
+//    }
+//    
+//    ZDKRequestProvider *provider = [[ZDKRequestProvider alloc] init];
+//    [provider createRequest:zdRequest withCallback:^(id result, NSError *error) {
+//        if (error) {
+//            // Handle the error
+//            reject(@"No Ticket", @"Failed to create ticket", error);
+//            // Log the error
+////            [ZDKLogger e:error.description];
+//            
+//        } else {
+//            // Handle the success
+//            ZDKDispatcherResponse * payload = result;
+//            NSString *data = [[NSString alloc] initWithData:payload.data encoding:NSUTF8StringEncoding];
+//            
+//            // Deserialize the data JSON string to an NSDictionary
+//            NSError *jsonError;
+//            NSData *objectData = [data dataUsingEncoding:NSUTF8StringEncoding];
+//            NSDictionary *json = [NSJSONSerialization JSONObjectWithData:objectData
+//                                                                 options:NSJSONReadingMutableContainers
+//                                                                   error:&jsonError];
+//            resolve(json);
+//        }
+//    }];
 }
 @end
