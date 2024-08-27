@@ -37,7 +37,7 @@ class HelpCenterActivityBuilder extends HelpCenterConfiguration.Builder {
 
   public HelpCenterActivityBuilder() {
     super();
-    this.withShowConversationsMenuButton(true);
+    this.withShowConversationsMenuButton(false);
     this.withContactUsButtonVisible(false);
   }
 
