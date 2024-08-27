@@ -148,15 +148,15 @@ RCT_EXPORT_METHOD(callSupport:(NSDictionary *)customFields) {
 
 RCT_EXPORT_METHOD(supportHistory){
     dispatch_async(dispatch_get_main_queue(), ^{
-//        UIViewController *requestListController = [ZDKRequestUi buildRequestList];
-//        requestListController.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle: @"Back"
-//                                                                                                                                                                                style: UIBarButtonItemStylePlain
-//                                                                                                                                                                               target: self
-//                                                                                                                                                                               action: @selector(dismissZendeskUI)];
-//        requestListController.navigationItem.rightBarButtonItem = nil;
-//UINavigationController *requestListControllerNav = [[UINavigationController alloc] initWithRootViewController: requestListController];
-//[RCTPresentedViewController() presentViewController:requestListControllerNav animated:YES completion:nil];
-    });
+          UIViewController *requestListController = [ZDKRequestUi buildRequestList];
+          requestListController.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle: @"Back"
+                                                                      style: UIBarButtonItemStylePlain
+                                                                      target: self
+                                                                      action: @selector(dismissZendeskUI)];
+          requestListController.navigationItem.rightBarButtonItem = nil;
+          UINavigationController *requestListControllerNav = [[UINavigationController alloc] initWithRootViewController: requestListController];
+          [RCTPresentedViewController() presentViewController:requestListControllerNav animated:YES completion:nil];
+        });
 }
 
 RCT_EXPORT_METHOD(createRequest:(NSDictionary *)request
