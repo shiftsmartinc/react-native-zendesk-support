@@ -152,10 +152,10 @@ RCT_EXPORT_METHOD(callSupport:(NSDictionary *)customFields) {
 
 RCT_EXPORT_METHOD(supportHistory){
     dispatch_async(dispatch_get_main_queue(), ^{
-        ZDKRequestUiConfiguration* requestConfig = [ZDKRequestUiConfiguration new];
+        ZDKRequestListUiConfiguration* requestConfig = [ZDKRequestListUiConfiguration new];
         [requestConfig allowRequestCreation: NO];
         
-        UIViewController* requestListController = [ZDKRequestUi buildRequestUiWith:@[requestConfig]];
+        UIViewController* requestListController = [ZDKRequestUi buildRequestListWith:@[requestConfig]];
         
 //        UIViewController *requestListController = [ZDKRequestUi buildRequestListWith:@[hcConfig, articleUiConfig]];
         requestListController.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle: @"Back"
