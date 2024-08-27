@@ -153,11 +153,8 @@ RCT_EXPORT_METHOD(supportHistory){
                                                                       style: UIBarButtonItemStylePlain
                                                                       target: self
                                                                       action: @selector(dismissZendeskUI)];
-        requestListController.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle: @"Back"
-                                                                    style: UIBarButtonItemStylePlain
-                                                                    target: self
-                                                                    action: @selector(dismissZendeskUI)];
           UINavigationController *requestListControllerNav = [[UINavigationController alloc] initWithRootViewController: requestListController];
+        requestListControllerNav.navigationItem.rightBarButtonItem = nil;
           [RCTPresentedViewController() presentViewController:requestListControllerNav animated:YES completion:nil];
         });
 }
