@@ -149,12 +149,12 @@ RCT_EXPORT_METHOD(callSupport:(NSDictionary *)customFields) {
 RCT_EXPORT_METHOD(supportHistory){
     dispatch_async(dispatch_get_main_queue(), ^{
           UIViewController *requestListController = [ZDKRequestUi buildRequestList];
-          requestListController.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle: @"Back"
-                                                                      style: UIBarButtonItemStylePlain
-                                                                      target: self
-                                                                      action: @selector(dismissZendeskUI)];
+//          requestListController.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle: @"Back"
+//                                                                      style: UIBarButtonItemStylePlain
+//                                                                      target: self
+//                                                                      action: @selector(dismissZendeskUI)];
           UINavigationController *requestListControllerNav = [[UINavigationController alloc] initWithRootViewController: requestListController];
-        requestListControllerNav.navigationItem.rightBarButtonItem = nil;
+          [requestListControllerNav setNavigationBarHidden:YES animated:YES];
           [RCTPresentedViewController() presentViewController:requestListControllerNav animated:YES completion:nil];
         });
 }
