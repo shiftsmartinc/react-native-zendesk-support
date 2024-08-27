@@ -42,19 +42,19 @@ RCT_EXPORT_METHOD(setupIdentity:(NSDictionary *)identity){
 
 RCT_EXPORT_METHOD(showHelpCenterWithOptions:(NSDictionary *)options) {
     dispatch_async(dispatch_get_main_queue(), ^{
-        ZDKHelpCenterUiConfiguration * hcConfig = [ZDKHelpCenterUiConfiguration new];
+        ZDKHelpCenterUiConfiguration* hcConfig = [ZDKHelpCenterUiConfiguration new];
 //        hcConfig.showContactOptionsOnEmptySearch = [RCTConvert BOOL:options[@"hideContactSupport"]];
         [hcConfig setShowContactOptions: NO];
         
         ZDKArticleUiConfiguration* articleUiConfig = [ZDKArticleUiConfiguration new];
         [articleUiConfig setShowContactOptions: NO];
-
-        UIViewController *helpCenter = [ZDKHelpCenterUi buildHelpCenterOverviewUiWithConfigs:@[hcConfig, articleUiConfig]];
+        
+        UIViewController* helpCenter = [ZDKHelpCenterUi buildHelpCenterOverviewUiWithConfigs:@[hcConfig, articleUiCOnfig]];
         helpCenter.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle: options[@"localizedDismissButtonTitle"] ?: @"Close"
                                                                                            style: UIBarButtonItemStylePlain
                                                                                           target: self
                                                                                           action: @selector(dismissZendeskUI)];
-        UINavigationController *helpCenterNav = [[UINavigationController alloc] initWithRootViewController: helpCenter];
+        UINavigationController* helpCenterNav = [[UINavigationController alloc] initWithRootViewController: helpCenter];
         [RCTPresentedViewController() presentViewController:helpCenterNav animated:YES completion:nil];
     });
 }
