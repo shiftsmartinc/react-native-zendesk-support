@@ -154,7 +154,13 @@ RCT_EXPORT_METHOD(supportHistory){
 //                                                                      target: self
 //                                                                      action: @selector(dismissZendeskUI)];
           UINavigationController *requestListControllerNav = [[UINavigationController alloc] initWithRootViewController: requestListController];
-          [requestListControllerNav setNavigationBarHidden:YES animated:YES];
+          [requestListControllerNav setNavigationBarHidden:NO animated:YES];
+          requestListControllerNav.leftBarButtonItem =[[UIBarButtonItem alloc] initWithTitle: @"Back"
+                                                         style: UIBarButtonItemStylePlain
+                                                         target: self
+                                                         action: @selector(dismissZendeskUI)];
+        
+//          [requestListControllerNav setNavigationBarHidden:YES animated:YES];
           [RCTPresentedViewController() presentViewController:requestListControllerNav animated:YES completion:nil];
         });
 }

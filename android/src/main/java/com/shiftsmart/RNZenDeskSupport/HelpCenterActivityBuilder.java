@@ -94,10 +94,10 @@ class HelpCenterActivityBuilder extends HelpCenterConfiguration.Builder {
     return this;
   }
 
-  private HelpCenterActivityBuilder  withContactUsButtonVisibility(boolean contactUsButtonVisibility) {
-    this.args.putSerializable("extra_contact_us_button_visibility", contactUsButtonVisibility);
-    return this;
-  }
+//  private HelpCenterActivityBuilder  withContactUsButtonVisibility(boolean contactUsButtonVisibility) {
+//    this.args.putSerializable("extra_contact_us_button_visibility", contactUsButtonVisibility);
+//    return this;
+//  }
 
   private HelpCenterActivityBuilder withContactConfiguration(Configuration  configuration) {
     if(configuration != null) {
