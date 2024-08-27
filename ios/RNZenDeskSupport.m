@@ -159,7 +159,7 @@ RCT_EXPORT_METHOD(supportHistory){
         [articleUiConfig setShowContactOptions: NO];
         
         UIViewController* helpCenter = [ZDKHelpCenterUi buildHelpCenterOverviewUiWithConfigs:@[hcConfig, articleUiConfig]];
-        UIViewController *requestListController = [ZDKRequestUi buildRequestListWith:@[hcConfig, articleUiCOnfig]];
+        UIViewController *requestListController = [ZDKRequestUi buildRequestListWith:@[hcConfig, articleUiConfig]];
           requestListController.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle: @"Back"
                                                                       style: UIBarButtonItemStylePlain
                                                                       target: self
