@@ -49,7 +49,7 @@ RCT_EXPORT_METHOD(showHelpCenterWithOptions:(NSDictionary *)options) {
         ZDKArticleUiConfiguration* articleUiConfig = [ZDKArticleUiConfiguration new];
         [articleUiConfig setShowContactOptions: NO];
         
-        UIViewController* helpCenter = [ZDKHelpCenterUi buildHelpCenterOverviewUiWithConfigs:@[hcConfig, articleUiCOnfig]];
+        UIViewController* helpCenter = [ZDKHelpCenterUi buildHelpCenterOverviewUiWithConfigs:@[hcConfig, articleUiConfig]];
         helpCenter.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle: options[@"localizedDismissButtonTitle"] ?: @"Close"
                                                                                            style: UIBarButtonItemStylePlain
                                                                                           target: self
@@ -152,7 +152,14 @@ RCT_EXPORT_METHOD(callSupport:(NSDictionary *)customFields) {
 
 RCT_EXPORT_METHOD(supportHistory){
     dispatch_async(dispatch_get_main_queue(), ^{
-          UIViewController *requestListController = [ZDKRequestUi buildRequestList];
+        ZDKHelpCenterUiConfiguration* hcConfig = [ZDKHelpCenterUiConfiguration new];
+        [hcConfig setShowContactOptions: NO];
+        
+        ZDKArticleUiConfiguration* articleUiConfig = [ZDKArticleUiConfiguration new];
+        [articleUiConfig setShowContactOptions: NO];
+        
+        UIViewController* helpCenter = [ZDKHelpCenterUi buildHelpCenterOverviewUiWithConfigs:@[hcConfig, articleUiConfig]];
+        UIViewController *requestListController = [ZDKRequestUi buildRequestListWith:@[hcConfig, articleUiCOnfig]];
           requestListController.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle: @"Back"
                                                                       style: UIBarButtonItemStylePlain
                                                                       target: self
