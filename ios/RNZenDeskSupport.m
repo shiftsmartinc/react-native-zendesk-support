@@ -43,14 +43,18 @@ RCT_EXPORT_METHOD(setupIdentity:(NSDictionary *)identity){
 RCT_EXPORT_METHOD(showHelpCenterWithOptions:(NSDictionary *)options) {
     dispatch_async(dispatch_get_main_queue(), ^{
         ZDKHelpCenterUiConfiguration * hcConfig = [ZDKHelpCenterUiConfiguration new];
-        hcConfig.showContactOptionsOnEmptySearch = [RCTConvert BOOL:options[@"hideContactSupport"]];
-        UIViewController *helpCenter = [ZDKHelpCenterUi buildHelpCenterOverviewUiWithConfigs:@[hcConfig]];
+//        hcConfig.showContactOptionsOnEmptySearch = [RCTConvert BOOL:options[@"hideContactSupport"]];
+        [hcConfig setShowContactOptions: NO];
+        
+        ZDKArticleUiConfiguration* articleUiConfig = [ZDKArticleUiConfiguration new];
+        [articleUiConfig setShowContactOptions: NO];
+
+        UIViewController *helpCenter = [ZDKHelpCenterUi buildHelpCenterOverviewUiWithConfigs:@[hcConfig, articleUiConfig]];
         helpCenter.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle: options[@"localizedDismissButtonTitle"] ?: @"Close"
                                                                                            style: UIBarButtonItemStylePlain
                                                                                           target: self
                                                                                           action: @selector(dismissZendeskUI)];
         UINavigationController *helpCenterNav = [[UINavigationController alloc] initWithRootViewController: helpCenter];
-
         [RCTPresentedViewController() presentViewController:helpCenterNav animated:YES completion:nil];
     });
 }
@@ -154,7 +158,6 @@ RCT_EXPORT_METHOD(supportHistory){
                                                                       target: self
                                                                       action: @selector(dismissZendeskUI)];
           UINavigationController *requestListControllerNav = [[UINavigationController alloc] initWithRootViewController: requestListController];
-          [requestListControllerNav setNavigationBarHidden:YES animated:YES];
           [RCTPresentedViewController() presentViewController:requestListControllerNav animated:YES completion:nil];
         });
 }
