@@ -152,7 +152,7 @@ RCT_EXPORT_METHOD(callSupport:(NSDictionary *)customFields) {
 
 RCT_EXPORT_METHOD(supportHistory){
     dispatch_async(dispatch_get_main_queue(), ^{
-        ZDKRequestListUiConfiguration* requestConfig = [ZDKRequestListUiConfiguration new];
+        ZDKRequestListUiConfiguration* requestConfig = [ZDKRequestUiConfiguration new];
         [requestConfig allowRequestCreation: NO];
         
         UIViewController* requestListController = [ZDKRequestUi buildRequestUiWith:@[requestConfig]];
