@@ -166,7 +166,7 @@ RCT_EXPORT_METHOD(supportHistory){
                 ZDKArticleUiConfiguration* articleUiConfig = [ZDKArticleUiConfiguration new];
                 [articleUiConfig setShowContactOptions: NO];
 
-                UIViewController* controller = [ZDKHelpCenterUi buildHelpCenterOverviewUiWithConfigs: @[helpCenterUiConfig, articleUiConfig]];
+                UIViewController* requestListController = [ZDKHelpCenterUi buildHelpCenterOverviewUiWithConfigs: @[helpCenterUiConfig, articleUiConfig]];
 
                 UINavigationController *requestListControllerNav = [[UINavigationController alloc] initWithRootViewController: requestListController];
                 [RCTPresentedViewController() presentViewController:requestListControllerNav animated:YES completion:nil];
