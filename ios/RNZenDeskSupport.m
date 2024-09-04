@@ -152,19 +152,24 @@ RCT_EXPORT_METHOD(callSupport:(NSDictionary *)customFields) {
 
 RCT_EXPORT_METHOD(supportHistory){
     dispatch_async(dispatch_get_main_queue(), ^{
-        ZDKRequestListUiConfiguration* requestConfig = [ZDKRequestListUiConfiguration new];
-        [requestConfig allowRequestCreation: NO];
-        
-        UIViewController* requestListController = [ZDKRequestUi buildRequestListWith:@[requestConfig]];
-        
-//        UIViewController *requestListController = [ZDKRequestUi buildRequestListWith:@[hcConfig, articleUiConfig]];
-        requestListController.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle: @"Back"
-                                                                      style: UIBarButtonItemStylePlain
-                                                                      target: self
-                                                                      action: @selector(dismissZendeskUI)];
-        
-        UINavigationController *requestListControllerNav = [[UINavigationController alloc] initWithRootViewController: requestListController];
-        [RCTPresentedViewController() presentViewController:requestListControllerNav animated:YES completion:nil];
+        //        UIViewController *requestListController = [ZDKRequestUi buildRequestList];
+        //        requestListController.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle: @"Back"
+        //                                                                                                                                                                                style: UIBarButtonItemStylePlain
+        //                                                                                                                                                                               target: self
+        //                                                                                                                                                                               action: @selector(dismissZendeskUI)];
+        //UINavigationController *requestListControllerNav = [[UINavigationController alloc] initWithRootViewController: requestListController];
+        //[RCTPresentedViewController() presentViewController:requestListControllerNav animated:YES completion:nil];
+                
+                ZDKHelpCenterUiConfiguration* helpCenterUiConfig = [ZDKHelpCenterUiConfiguration new];
+                [helpCenterUiConfig setShowContactOptions: NO];
+
+                ZDKArticleUiConfiguration* articleUiConfig = [ZDKArticleUiConfiguration new];
+                [articleUiConfig setShowContactOptions: NO];
+
+                UIViewController* controller = [ZDKHelpCenterUi buildHelpCenterOverviewUiWithConfigs: @[helpCenterUiConfig, articleUiConfig]];
+
+                UINavigationController *requestListControllerNav = [[UINavigationController alloc] initWithRootViewController: requestListController];
+                [RCTPresentedViewController() presentViewController:requestListControllerNav animated:YES completion:nil];
     });
 }
 
